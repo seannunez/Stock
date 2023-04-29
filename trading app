@@ -1,0 +1,113 @@
+// This code is written in Java and designed for Android
+
+// Define the Stock class
+public class Stock {
+    private String ticker;
+    private double price;
+
+    // Constructor method
+    public Stock(String ticker, double price) {
+        this.ticker = ticker;
+        this.price = price;
+    }
+
+    // Getter methods
+    public String getTicker() {
+        return ticker;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    // Setter methods
+    public void setTicker(String ticker) {
+        this.ticker = ticker;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+}
+
+// Define the Portfolio class
+public class Portfolio {
+    private ArrayList<Stock> stocks;
+
+    // Constructor method
+    public Portfolio() {
+        stocks = new ArrayList<Stock>();
+    }
+
+    // Method to add a stock to the portfolio
+    public void addStock(Stock stock) {
+        stocks.add(stock);
+    }
+
+    // Method to remove a stock from the portfolio
+    public void removeStock(Stock stock) {
+        stocks.remove(stock);
+    }
+
+    // Method to get the total value of the portfolio
+    public double getTotalValue() {
+        double total = 0.0;
+        for (Stock stock : stocks) {
+            total += stock.getPrice();
+        }
+        return total;
+    }
+}
+
+// Define the MainActivity class
+public class MainActivity extends AppCompatActivity {
+    private EditText tickerEditText;
+    private EditText priceEditText;
+    private Button addButton;
+    private Button removeButton;
+    private TextView portfolioValueTextView;
+    private Portfolio portfolio;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        tickerEditText = findViewById(R.id.tickerEditText);
+        priceEditText = findViewById(R.id.priceEditText);
+        addButton = findViewById(R.id.addButton);
+        removeButton = findViewById(R.id.removeButton);
+        portfolioValueTextView = findViewById(R.id.portfolioValueTextView);
+        portfolio = new Portfolio();
+
+        // Set up the add button
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ticker = tickerEditText.getText().toString();
+                double price = Double.parseDouble(priceEditText.getText().toString());
+                Stock stock = new Stock(ticker, price);
+                portfolio.addStock(stock);
+                updatePortfolioValueTextView();
+            }
+        });
+
+        // Set up the remove button
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ticker = tickerEditText.getText().toString();
+                double price = Double.parseDouble(priceEditText.getText().toString());
+                Stock stock = new Stock(ticker, price);
+                portfolio.removeStock(stock);
+                updatePortfolioValueTextView();
+            }
+        });
+    }
+
+    // Method to update the portfolio value TextView
+    private void updatePortfolioValueTextView() {
+        double portfolioValue = portfolio.getTotalValue();
+        portfolioValueTextView.setText(String.format("$%.2f", portfolioValue));
+    }
+}
